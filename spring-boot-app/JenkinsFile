@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'maven-docker-agent:v1'
+      image 'jibin321/maven-docker-agent:v2'
       args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
     }
   }
@@ -59,9 +59,9 @@ pipeline {
                     git config user.email "jemin@stthomascollege.ac.in"
                     git config user.name "${GIT_USER_NAME}"
                     
-                    sed -i "s|image: .*|image: jeminthomas/static-website:${BUILD_NUMBER}|g" k8s/deployment.yml
+                    sed -i "s|image: .*|image: jeminthomas/spring-boot-app:${BUILD_NUMBER}|g" spring-boot-app-manifests/deployment.yml
                     
-                    git add k8s/deployment.yml
+                    git add spring-boot-app-manifests/deployment.yml
                     git commit -m "Update static site image tag to ${BUILD_NUMBER} [skip ci]" || echo "No changes to commit"
                     git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                 '''
