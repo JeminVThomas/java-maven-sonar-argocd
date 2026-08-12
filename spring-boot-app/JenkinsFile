@@ -32,7 +32,7 @@ pipeline {
 
     stage('Build and Push Docker Image') {
       environment {
-        DOCKER_IMAGE = "jeminthomas/static-website:${BUILD_NUMBER}"
+        DOCKER_IMAGE = "jeminthomas/java-maven-sonar-argocd:${BUILD_NUMBER}"
         REGISTRY_CREDENTIALS = credentials('docker-cred')
       }
       steps {
@@ -50,7 +50,7 @@ pipeline {
 
     stage('Update Deployment File') {
         environment {
-            GIT_REPO_NAME = "hosting_test"
+            GIT_REPO_NAME = "java-maven-sonar-argocd"
             GIT_USER_NAME = "JeminVThomas"
         }
         steps {
