@@ -61,8 +61,8 @@ stage('Update Deployment File') {
                 withCredentials([
                     usernamePassword(
                         credentialsId: 'github',
-                        usernameVariable: 'JeminVThomas',
-                        passwordVariable: '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'
+                        usernameVariable: 'GITHUB_USERNAME',
+                        passwordVariable: 'GITHUB_TOKEN'
                     )
                 ]) {
                     sh '''
