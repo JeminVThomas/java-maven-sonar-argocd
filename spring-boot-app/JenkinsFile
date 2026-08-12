@@ -75,7 +75,7 @@ stage('Update Deployment File') {
                         git config user.email "jemin@stthomascollege.ac.in"
                         git config user.name "${GIT_USER_NAME}"
 
-                        sed -i "s|image: .*|image: zree7/spring-boot-app:${BUILD_NUMBER}|g" spring-boot-app-manifests/deployment.yml
+                        sed -i "s|image: .*|image: jeminthomas/spring-boot-app:${BUILD_NUMBER}|g" spring-boot-app-manifests/deployment.yml
 
                         git add spring-boot-app-manifests/deployment.yml
 
