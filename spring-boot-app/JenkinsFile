@@ -52,36 +52,41 @@ stage('SonarQube Analysis') {
     }
 
 stage('Update Deployment File') {
-    environment {
-        GIT_REPO_NAME = "java-maven-sonar-argocd"
-        GIT_USER_NAME = "JeminVThomas"
-    }
+            environment {
+                GIT_REPO_NAME = "java-maven-sonar-argocd"
+                GIT_USER_NAME = "JeminVThomas"
+            }
 
-    steps {
-        withCredentials([
-            string(
-                credentialsId: 'github',
-                variable: 'GITHUB_TOKEN'
-            )
-        ]) {
-            sh '''
-                git config user.email "jemin@stthomascollege.ac.in"
-                git config user.name "${GIT_USER_NAME}"
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'github',
+                        usernameVariable: 'JeminVThomas',
+                        passwordVariable: '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'
+                    )
+                ]) {
+                    sh '''
+                        rm -rf gitops-repo
 
-                sed -i "s|image: .*|image: jeminthomas/spring-boot-app:${BUILD_NUMBER}|g" spring-boot-app-manifests/deployment.yml
+                        git clone https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git gitops-repo
 
-                git add spring-boot-app-manifests/deployment.yml
+                        cd gitops-repo
 
-                git commit \
-                    -m "Update Spring Boot image tag to ${BUILD_NUMBER} [skip ci]" \
-                    || echo "No changes to commit"
+                        git config user.email "jemin@stthomascollege.ac.in"
+                        git config user.name "${GIT_USER_NAME}"
 
-                git push \
-                    https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git \
-                    HEAD:main
-            '''
+                        sed -i "s|image: .*|image: zree7/spring-boot-app:${BUILD_NUMBER}|g" spring-boot-app-manifests/deployment.yml
+
+                        git add spring-boot-app-manifests/deployment.yml
+
+                        git commit \
+                            -m "Update Spring Boot image tag to ${BUILD_NUMBER} [skip ci]" \
+                            || echo "No changes to commit"
+
+                        git push origin HEAD:main
+                    '''
+                }
+            }
         }
     }
-}
-  }
 }
